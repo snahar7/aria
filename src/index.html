@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aria</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ── Onboarding (shown only on first launch) ── -->
+  <div id="onboarding-panel" class="hidden">
+    <div class="onboarding-greeting">Hi, I'm Aria 👋</div>
+    <div class="onboarding-sub">I manage your tasks so you don't have to.<br>Two minutes to set me up right.</div>
+
+    <div class="onboarding-step">
+      <div class="onboarding-q">1. What's your name?</div>
+      <input id="ob-name" class="onboarding-input" type="text" placeholder="Your name" />
+    </div>
+
+    <div class="onboarding-step">
+      <div class="onboarding-q">2. What kind of work do you do?</div>
+      <textarea id="ob-work" class="onboarding-textarea" placeholder="e.g. I'm a founder building a startup. I manage product, fundraising, and team."></textarea>
+    </div>
+
+    <div class="onboarding-step">
+      <div class="onboarding-q">3. Any big ongoing projects right now?</div>
+      <textarea id="ob-projects" class="onboarding-textarea" placeholder="e.g. Series A fundraising, launching v2 of our product, hiring 3 engineers."></textarea>
+    </div>
+
+    <div class="onboarding-step">
+      <div class="onboarding-q">4. How do you like to prioritize?</div>
+      <input id="ob-priority" class="onboarding-input" type="text" placeholder="e.g. deadlines first, then highest impact" />
+    </div>
+
+    <button class="onboarding-done-btn" id="ob-done-btn">Let's go →</button>
+  </div>
+
+  <!-- ── Main Panel ── -->
+  <div id="main-panel">
+
+    <!-- Header -->
+    <div id="header">
+      <div id="header-left">
+        <div id="logo">A</div>
+        <span id="app-name">Aria</span>
+      </div>
+      <div id="header-right">
+        <button class="icon-btn" id="theme-btn" title="Toggle light/dark mode">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="3.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1.06 1.06M11.54 11.54l1.06 1.06M3.4 12.6l1.06-1.06M11.54 4.46l1.06-1.06" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="archive-btn" title="View Archive">
+          <!-- Archive icon -->
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="12" height="3" rx="1" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M3 5v7a1 1 0 001 1h8a1 1 0 001-1V5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M6 8h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="settings-btn" title="Settings">
+          <!-- Gear / settings icon -->
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.5 2h3l.5 1.5a4.5 4.5 0 011.06.62L12.5 3.5l1.5 2.6-1.2 1a4.6 4.6 0 010 1.8l1.2 1-1.5 2.6-1.44-.62A4.5 4.5 0 019.5 12.5L9 14H7l-.5-1.5a4.5 4.5 0 01-1.06-.62L4 12.5 2.5 9.9l1.2-1a4.6 4.6 0 010-1.8l-1.2-1L4 3.5l1.44.62A4.5 4.5 0 016.5 3.5L6.5 2z" stroke="currentColor" stroke-width="1.15" stroke-linejoin="round"/>
+            <circle cx="8" cy="8" r="1.75" stroke="currentColor" stroke-width="1.15"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div id="input-area">
+      <div id="input-wrapper">
+        <textarea
+          id="task-input"
+          rows="1"
+          placeholder="Type a task, update, or question..."
+        ></textarea>
+        <button id="send-btn" title="Send (Enter)">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 10V2M6 2L2.5 5.5M6 2l3.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- AI response bar -->
+    <div id="ai-response" class="hidden">
+      <span class="dot"></span>
+      <span id="ai-response-text"></span>
+      <button id="undo-btn" class="hidden">Undo</button>
+    </div>
+
+    <!-- Clarification UI (shown when AI needs to ask) -->
+    <div id="clarify-container" class="hidden"></div>
+
+    <!-- Task list -->
+    <div id="task-list-container">
+      <div id="task-list">
+        <!-- Rendered by renderer.js -->
+      </div>
+    </div>
+
+  </div><!-- end #main-panel -->
+
+  <!-- ── Detail Panel (slides in from right) ── -->
+  <div id="detail-panel">
+    <div id="detail-header">
+      <button id="back-btn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back
+      </button>
+      <div id="detail-status-display" style="margin-left:auto; font-size:11px; color:var(--text-3);"></div>
+    </div>
+
+    <div id="detail-content">
+      <!-- Rendered dynamically by renderer.js when a task is clicked -->
+    </div>
+  </div>
+
+  <!-- ── Settings Panel (slides in from right) ── -->
+  <div id="settings-panel">
+    <div id="settings-header" style="border-bottom:1px solid var(--border-light); padding:10px 16px; display:flex; align-items:center; gap:8px;">
+      <button id="settings-back-btn" class="icon-btn" style="width:auto; padding:4px 6px; font-size:13px; display:flex; align-items:center; gap:4px; color:var(--text-2);">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Settings
+      </button>
+    </div>
+
+    <div id="settings-content">
+
+      <div class="settings-section">
+        <div class="settings-section-title">Claude API Key</div>
+        <div class="settings-field">
+          <label class="settings-label">API Key</label>
+          <input id="settings-api-key" class="settings-input" type="password" placeholder="sk-ant-..." />
+          <div class="settings-hint">Get yours at console.anthropic.com — it's free to start.</div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">About You</div>
+        <div class="settings-field">
+          <label class="settings-label">Your name</label>
+          <input id="settings-name" class="settings-input" type="text" placeholder="Your name" />
+        </div>
+        <div class="settings-field">
+          <label class="settings-label">Work context</label>
+          <textarea id="settings-context" class="settings-textarea" placeholder="What kind of work do you do? Ongoing projects?"></textarea>
+          <div class="settings-hint">This helps Aria understand your tasks better.</div>
+        </div>
+      </div>
+
+      <button class="settings-save-btn" id="settings-save-btn">Save Settings</button>
+
+      <div class="settings-section" style="margin-top:20px;">
+        <div class="settings-section-title">System</div>
+        <div class="settings-field" style="flex-direction:row; align-items:center; justify-content:space-between;">
+          <label class="settings-label" style="margin-bottom:0;">Launch Aria at login</label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="settings-launch-login" />
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="settings-hint">Aria starts automatically when you log into your Mac.</div>
+      </div>
+
+      <div class="settings-section" style="margin-top: 24px;">
+        <div class="settings-section-title">Data</div>
+        <button class="settings-danger-btn" id="export-btn">Export Tasks as JSON</button>
+        <button class="settings-danger-btn" id="reset-btn" style="margin-top:6px;">Reset Everything</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Archive Panel ── -->
+  <div id="archive-panel">
+    <div id="archive-header">
+      <button id="archive-back-btn" class="icon-btn" style="-webkit-app-region:no-drag; width:auto; padding:4px 8px; font-size:13px; display:flex; align-items:center; gap:4px; color:var(--text-2);">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Archive
+      </button>
+      <span id="archive-count" style="margin-left:auto; font-size:11px; color:var(--text-3);"></span>
+    </div>
+
+    <div id="archive-search-wrap">
+      <input id="archive-search" placeholder="Search archived tasks…" autocomplete="off" />
+    </div>
+
+    <div id="archive-list-container">
+      <div id="archive-list"></div>
+    </div>
+  </div>
+
+  <!-- ── Offline banner (shown when API unreachable) ── -->
+  <div id="offline-banner" class="hidden">
+    <span id="offline-icon">⚡</span>
+    <span id="offline-text">Offline — input queued</span>
+    <span id="offline-count"></span>
+  </div>
+
+</div><!-- end #app -->
+
+<script src="renderer.js"></script>
+</body>
+</html>
