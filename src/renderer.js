@@ -458,7 +458,7 @@ function bindEvents() {
   // Reset
   document.getElementById('reset-btn').addEventListener('click', async () => {
     if (confirm('This will delete ALL your tasks and settings. Are you sure?')) {
-      await window.aria.saveSettings({ onboardingDone: false, apiKey: '', userName: '', workContext: '' })
+      await window.aria.saveSettings({ onboardingDone: false, apiKey: '', model: '', userName: '', workContext: '' })
       location.reload()
     }
   })
@@ -829,6 +829,7 @@ function renderDetailPanel(task) {
 async function openSettings() {
   const settings = await window.aria.getSettings()
   document.getElementById('settings-api-key').value = settings.apiKey || ''
+  document.getElementById('settings-model').value = settings.model || ''
   document.getElementById('settings-name').value = settings.userName || ''
   document.getElementById('settings-context').value = settings.workContext || ''
   const launchAtLogin = await window.aria.getLoginItem()
@@ -842,11 +843,12 @@ function closeSettings() {
 
 async function saveSettings() {
   const apiKey      = document.getElementById('settings-api-key').value.trim()
+  const model       = document.getElementById('settings-model').value.trim()
   const userName    = document.getElementById('settings-name').value.trim()
   const workContext = document.getElementById('settings-context').value.trim()
   const launchAtLogin = document.getElementById('settings-launch-login').checked
 
-  await window.aria.saveSettings({ apiKey, userName, workContext })
+  await window.aria.saveSettings({ apiKey, model, userName, workContext })
   await window.aria.setLoginItem(launchAtLogin)
   closeSettings()
   showResponse('Settings saved.', 'success', false)

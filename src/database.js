@@ -201,6 +201,7 @@ function getRecentCompletedTitles() {
 function getSettings() {
   return readJSON(SETTINGS_FILE, {
     apiKey: '',
+    model: '',
     userName: '',
     workContext: '',
     onboardingDone: false,

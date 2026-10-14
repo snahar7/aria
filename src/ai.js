@@ -7,7 +7,12 @@
  */
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages'
-const MODEL = 'claude-opus-4-5'
+// Default model. Override in Settings → Model, or with the ARIA_MODEL env var.
+const DEFAULT_MODEL = 'claude-opus-4-5'
+
+function resolveModel(settings) {
+  return (settings && settings.model && settings.model.trim()) || process.env.ARIA_MODEL || DEFAULT_MODEL
+}
 
 /**
  * Main function — processes any natural language input
@@ -26,7 +31,7 @@ async function processInput(userText, tasks, settings) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: MODEL,
+        model: resolveModel(settings),
         max_tokens: 1024,
         system: systemPrompt,
         messages: [{ role: 'user', content: userText }]
@@ -190,4 +195,4 @@ function buildTaskSummary(tasks) {
   return summary || '(No active tasks)'
 }
 
-module.exports = { processInput }
+module.exports = { processInput, resolveModel, DEFAULT_MODEL }

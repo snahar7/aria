@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aria</title>
   <link rel="stylesheet" href="styles.css" />
@@ -143,6 +144,11 @@
           <label class="settings-label">API Key</label>
           <input id="settings-api-key" class="settings-input" type="password" placeholder="sk-ant-..." />
           <div class="settings-hint">Get yours at console.anthropic.com — it's free to start.</div>
+        </div>
+        <div class="settings-field">
+          <label class="settings-label">Model</label>
+          <input id="settings-model" class="settings-input" type="text" placeholder="claude-opus-4-5" spellcheck="false" />
+          <div class="settings-hint">Any Anthropic model id. Leave blank for the default (claude-opus-4-5).</div>
         </div>
       </div>
 
