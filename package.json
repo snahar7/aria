@@ -40,14 +40,16 @@
         "dmg",
         "zip"
       ],
-      "identity": null,
+      "identity": "-",
       "extendInfo": {
         "LSUIElement": true
-      }
+      },
+      "hardenedRuntime": false
     },
     "dmg": {
       "title": "Aria ${version}"
     },
-    "artifactName": "Aria-${version}-mac-${arch}.${ext}"
+    "artifactName": "Aria-${version}-mac-${arch}.${ext}",
+    "publish": null
   }
 }
