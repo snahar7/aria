@@ -14,7 +14,7 @@
   "scripts": {
     "start": "electron .",
     "lint": "node scripts/check.mjs",
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "dist": "electron-builder --mac --arm64 --x64 --publish never",
     "dist:zip": "electron-builder --mac zip --arm64 --x64 --publish never"
   },
