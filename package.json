@@ -1,0 +1,53 @@
+{
+  "name": "aria",
+  "productName": "Aria",
+  "version": "1.0.0",
+  "description": "An AI task manager that lives in your Mac menu bar. Type what's on your mind; Claude turns it into prioritized tasks.",
+  "main": "src/main.js",
+  "author": "Shubham Nahar",
+  "license": "MIT",
+  "homepage": "https://github.com/snahar7/aria",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snahar7/aria.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "lint": "node scripts/check.mjs",
+    "test": "node --test test/",
+    "dist": "electron-builder --mac --arm64 --x64 --publish never",
+    "dist:zip": "electron-builder --mac zip --arm64 --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "^44.7.2",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.snahar7.aria",
+    "productName": "Aria",
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "identity": null,
+      "extendInfo": {
+        "LSUIElement": true
+      }
+    },
+    "dmg": {
+      "title": "Aria ${version}"
+    },
+    "artifactName": "Aria-${version}-mac-${arch}.${ext}"
+  }
+}
